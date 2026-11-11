@@ -121,6 +121,14 @@ const StudentDashboard = () => {
             <span className="hidden sm:block">My Profile</span>
           </Link>
 
+          {/* My Ride Requests */}
+          <Link
+            to="/my-ride-requests"
+            className="text-sm font-semibold text-gray-600 hover:text-green-700"
+          >
+            My Ride Requests
+          </Link>
+
           <Link
             to="/login"
             className="text-sm font-semibold text-red-500 hover:text-red-700"
@@ -167,7 +175,6 @@ const StudentDashboard = () => {
         </section>
 
         {/* Quick Statistics */}
-        
         <section className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-9">
 
           {[
@@ -234,7 +241,7 @@ const StudentDashboard = () => {
         <section className="mb-9">
           <SectionHeading
             title="My Published Rides"
-            link="/my-rides"
+            link="/my-published-rides"
           />
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -260,7 +267,7 @@ const StudentDashboard = () => {
 
             <SectionHeading
               title="My Submitted Requests"
-              link="/my-requests"
+              link="/my-ride-requests"
             />
 
             <div className="space-y-4">
@@ -302,7 +309,7 @@ const StudentDashboard = () => {
 
             <SectionHeading
               title="Requests Received"
-              link="/manage-requests"
+              link="/ride-requests"
             />
 
             <div className="space-y-4">
@@ -330,7 +337,7 @@ const StudentDashboard = () => {
                     </div>
 
                     <Link
-                      to="/manage-requests"
+                      to="/ride-requests"
                       className="inline-block mt-3 text-sm text-green-700 font-semibold hover:underline"
                     >
                       Manage Request →
@@ -352,7 +359,7 @@ const StudentDashboard = () => {
 
           <SectionHeading
             title="My Upcoming Rides"
-            link="/my-rides"
+            link="/my-published-rides"
           />
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -431,4 +438,3 @@ const StudentDashboard = () => {
 };
 
 export default StudentDashboard;
-

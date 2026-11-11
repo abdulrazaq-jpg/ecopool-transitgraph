@@ -14,6 +14,11 @@ import Profile from "./pages/Profile";
 import FindRides from "./pages/FindRides";
 import RideDetails from "./pages/RideDetails";
 import CreateRide from "./pages/CreateRide";
+import MyPublishedRides from "./pages/MyPublishedRides";
+import RideRequests from "./pages/RideRequests";
+import MyRideRequests from "./pages/MyRideRequests";
+import Notifications from "./pages/Notifications";
+
 
 
 function App() {
@@ -33,6 +38,10 @@ function App() {
                <Route path="/find-rides" element={<FindRides />} />
                <Route path="/ride/:id" element={<RideDetails />} />
                <Route path="/create-ride" element={<CreateRide />} />
+               <Route path="/my-published-rides" element={<MyPublishedRides />} />
+               <Route path="/ride-requests" element={<RideRequests />} />
+               <Route path="/my-ride-requests" element={<MyRideRequests />}/>
+               <Route path="/notifications" element={<Notifications />} />
             </Routes>
 
             <Footer />
