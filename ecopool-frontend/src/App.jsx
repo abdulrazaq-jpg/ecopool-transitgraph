@@ -9,6 +9,12 @@ import Login from "./pages/Login";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import StudentDashboard from "./pages/StudentDashboard";
+import FacultyDashboard from "./pages/FacultyDashboard";
+import Profile from "./pages/Profile";
+import FindRides from "./pages/FindRides";
+import RideDetails from "./pages/RideDetails";
+import CreateRide from "./pages/CreateRide";
+
 
 function App() {
     return (
@@ -21,9 +27,12 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                <Route path="/reset-password" element={<ResetPassword />} />
-               <Route path="/student-dashboard" element={<StudentDashboard />}
-/>
-
+               <Route path="/student-dashboard" element={<StudentDashboard />}/>
+               <Route path="/faculty-dashboard" element={<FacultyDashboard />}/>
+               <Route path="/profile" element={<Profile />} />
+               <Route path="/find-rides" element={<FindRides />} />
+               <Route path="/ride/:id" element={<RideDetails />} />
+               <Route path="/create-ride" element={<CreateRide />} />
             </Routes>
 
             <Footer />
