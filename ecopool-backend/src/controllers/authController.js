@@ -5,7 +5,7 @@ import studentIds from "../data/studentIds.js";
 import facultyIds from "../data/facultyIds.js";
 
 // Register a new user
-export const registerUser = async (req, res) => {
+export const registerUser = async (req, res, next) => {
     try {
         // 1. Get registration details from frontend
         const {
@@ -15,7 +15,6 @@ export const registerUser = async (req, res) => {
             password,
             accountType
         } = req.body;
-
 
         // 2. Verify institutional ID
         let approvedIds;
@@ -32,7 +31,6 @@ export const registerUser = async (req, res) => {
                 message: "Invalid institutional ID for the selected account type."
             });
         }
-
 
         // 3. Check whether email or institutional ID already exists
         const existingUser = await User.findOne({
@@ -58,10 +56,8 @@ export const registerUser = async (req, res) => {
             }
         }
 
-
         // 4. Hash the password
         const hashedPassword = await bcrypt.hash(password, 12);
-
 
         // 5. Create new user in MongoDB
         const newUser = await User.create({
@@ -71,7 +67,6 @@ export const registerUser = async (req, res) => {
             password: hashedPassword,
             accountType
         });
-
 
         // 6. Send successful response
         return res.status(201).json({
@@ -96,11 +91,7 @@ export const registerUser = async (req, res) => {
             });
         }
 
-        console.error("Registration error:", error);
-
-        return res.status(500).json({
-            success: false,
-            message: "Server error during registration."
-        });
+        // Forward unexpected errors to centralized error middleware
+        next(error);
     }
 };

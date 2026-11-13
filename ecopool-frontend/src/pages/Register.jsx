@@ -1,32 +1,71 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 export default function Register() {
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
+    const [loading, setLoading] = useState(false);
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
 
         setError("");
         setSuccess("");
 
-        const formData = new FormData(event.currentTarget);
+        const form = event.currentTarget;
+        const formData = new FormData(form);
 
-        const password = formData.get("password");
-        const confirmPassword = formData.get("confirmPassword");
+        const registrationData = {
+            fullName: formData.get("fullName"),
+            accountType: formData.get("accountType"),
+            email: formData.get("email"),
+            institutionalId: formData.get("institutionalId"),
+            password: formData.get("password"),
+            confirmPassword: formData.get("confirmPassword")
+        };
 
-        // Password confirmation validation
-        if (password !== confirmPassword) {
+        // Check password confirmation
+        if (registrationData.password !== registrationData.confirmPassword) {
             setError("Passwords do not match.");
             return;
         }
 
-        // Frontend validation passed.
-        // Actual registration will be implemented after backend integration.
-        setSuccess(
-            "Your details passed frontend validation. Account creation will be enabled after backend integration."
-        );
+        try {
+            setLoading(true);
+
+            const response = await axios.post(
+                "http://localhost:8000/api/auth/register",
+                registrationData
+            );
+
+            setSuccess(response.data.message);
+
+            // Clear the form after successful registration
+            form.reset();
+
+        } catch (err) {
+
+            if (err.response?.data?.errors) {
+
+                const messages = err.response.data.errors.map(
+                    (item) => item.msg
+                );
+
+                setError(messages.join(" "));
+
+            } else {
+
+                setError(
+                    err.response?.data?.message ||
+                    "Registration failed. Please try again."
+                );
+
+            }
+
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -270,11 +309,11 @@ export default function Register() {
                                         Select Account Type
                                     </option>
 
-                                    <option value="student">
+                                    <option value="Student">
                                         Student
                                     </option>
 
-                                    <option value="faculty">
+                                    <option value="Faculty">
                                         Faculty
                                     </option>
 
@@ -385,9 +424,10 @@ export default function Register() {
                         {/* Submit Button */}
                         <button
                             type="submit"
-                            className="w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-3.5 rounded-xl transition-colors"
+                            disabled={loading}
+                            className="w-full bg-green-700 hover:bg-green-800 disabled:bg-green-400 disabled:cursor-not-allowed text-white font-semibold py-3.5 rounded-xl transition-colors"
                         >
-                            Create Account
+                            {loading ? "Creating Account..." : "Create Account"}
                         </button>
 
                     </form>
