@@ -1,8 +1,11 @@
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useAuth } from "../context/AuthContext";
 
 export default function Login() {
+    const { login } = useAuth();
     const [formData, setFormData] = useState({
         email: "",
         password: "",
@@ -11,6 +14,9 @@ export default function Login() {
 
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
+
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -21,7 +27,7 @@ export default function Login() {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
 
@@ -30,8 +36,38 @@ export default function Login() {
             return;
         }
 
-        // Backend login API integration will be added later.
-        console.log("Login form data:", formData);
+        try {
+            setLoading(true);
+
+            const response = await axios.post(
+                "http://localhost:8000/api/auth/login",
+                {
+                    email: formData.email,
+                    password: formData.password
+                }
+            );
+
+            // Extract token and user details
+
+            const { token, user } = response.data;
+
+            login(token, user, formData.rememberMe);
+
+            // Redirect after successful login
+            if (user.accountType === "Student") {
+                navigate("/student-dashboard");
+            } else if (user.accountType === "Faculty") {
+                navigate("/faculty-dashboard");
+            }
+
+        } catch (err) {
+            setError(
+                err.response?.data?.message ||
+                "Login failed. Please check your credentials."
+            );
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -310,9 +346,10 @@ export default function Login() {
                             {/* Login Button */}
                             <button
                                 type="submit"
-                                className="w-full rounded-full bg-[#00a843] py-4 text-lg font-bold text-white shadow-md transition hover:bg-[#008f39] hover:shadow-lg"
+                                disabled={loading}
+                                className="w-full rounded-full bg-[#00a843] py-4 text-lg font-bold text-white shadow-md transition hover:bg-[#008f39] hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-60"
                             >
-                                Login
+                                {loading ? "Logging in..." : "Login"}
                             </button>
 
                         </form>
